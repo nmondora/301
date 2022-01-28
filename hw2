@@ -1,0 +1,529 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# AAE 301 HW2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sympy\n",
+    "import pylab\n",
+    "import numpy\n",
+    "import math\n",
+    "import scipy.integrate as integrate\n",
+    "i = sympy.I\n",
+    "pi = sympy.pi\n",
+    "exp = sympy.exp\n",
+    "sympy.init_printing()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Question 1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Consider the vectors f and g in C3 given by"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(array([2, 1 + I, 3 + 2*I], dtype=object),\n",
+       " array([I, 3 - I, 4 + 5*I], dtype=object))"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#f = sympy.symbols('f', complex=True)\n",
+    "f = numpy.array([2, 1+1*i, 3+2*i])\n",
+    "#g = sympy.symbols('g', complex=True)\n",
+    "g = numpy.array([1*i, 3-1*i, 4+5*i])\n",
+    "f, g"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "a) Compute (f,g)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAEcAAAATCAYAAADCrxD+AAAABHNCSVQICAgIfAhkiAAAAtNJREFUWIXt2E+IV1UUB/DP6IjJuAhc6KZSgqJSrCECN6FJQgQFiotA09CFIIhkUAjKT1ci/VEMVFRGmbblQszcOJmCIGiDiGhGDm40KVGyRikbF+f+4M6b98Y3WjOzmC887uN7zzvvvO+755z7Xkuj0TCGcowb6QBGET5EH95rErk4U7ASB/EzenEbJ7FCPSGXphv0JV8jhZ4sjuJxveKaV9N4pkm0ZpOLsRPX0IWrmIqF2Iu3kk1fhfOnsAN3MHmID/N/4Da2lfB3Kuw/wWZcbhK5OD/hHRzGvxm/HqexSAj1dYnjFnTgd3yDj2qFX43lyd88fP+IPm6hMQT7q0UiT5VjOKS/MMQy3JXO51Y4XoM38AH+HEJAowXzREZszcnWctsB+DuN/5TMvYAt2I4fhEijAROxBE+LF3ZOxHe/xLY9jT/mZB1xWvF+Ov+uZK5TLMn1tUIePkwTseW4Ilb38QLfFOdsTtbpQFswE9/iaGFuI14RNaK3hq/hQgfmC4HaMAu7MR1HMLtg3y4K9eWcfJg4a7AOF0WbzvGaWC2f4dRQo8/QY2C77UhzXSVz+2v43CRq6K/4C+exCp9jkv6Fug3PoVuh3g6WVqtFHbkg3sLNwnWdosNtqBHsYNiGJwvcy3gXB4R4Obof4167xMt+PeNmi0VytmhcJc5afCEUn48bhfnJQm24W+FjTzq2J39VKNuLLBfi7PforbwMzedoy7jSYky5OB+LOtONN/Fbic097KsIoF3UoZO45PFS7r/GnDT+knGlxZiB4mwQu8QzWKB/KuXoVf150BDiHBA76+HGS2KXX4z9GXyZzr/K+Hax+i8UHeXiLBPC3McJUYyL6FGvII4kFotPgS7Ruv/As3gbT4iu+2mynYgXRZYM2MPl4sxI43jVNeK40S9OF54Xq3eOqC+3RJp3pqP5fTgTE5SkFLSM/c+pxtj/nEEwJs4geACTQ6Q/1uu6wAAAAABJRU5ErkJggg==\n",
+      "text/latex": [
+       "$\\displaystyle 24 + 5 i$"
+      ],
+      "text/plain": [
+       "24 + 5⋅ⅈ"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q1a = numpy.vdot(f, g)\n",
+    "sympy.simplify(q1a)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "b) Compute ||f||"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAGwAAAAYCAYAAAAf1RgaAAAABHNCSVQICAgIfAhkiAAABPRJREFUaIHt2nmIV1UUB/DPpC0yQoLSXtpuG9UkUVGRuUQFbRIVtBfZYlNUUEnGJGEW5dJOGmoG5R+2UGn5R5OlZZYtVFoaakaYZpaVaKXZH+f98s37vfebRWdyZL7wuO+dc+995/2+955z7r2/qrq6Oh1oP9jh/zZgO8eNWIL1mIdTGqlfh02Z68d0hQ7CWg8XYSxG4FjMxnTs10i7b7Bn6joqrSwi7DmsRHXL7d3ucJsY8Zckz8clz9dUqD8R47AAtViOGxp5zwYxq0rXT2llHmF9cClGYm0i645r8TK+xTqswazE4KbO1MtsnurXNrHN1sZS5W4n1/1k0Ccp56XKV3A/umbq7iQInZGRz8BJjdh3AH4QrvQF9EorO+c0GIHf8FRKdmHyvBz1WIbdcQHG48ykzqYKhuyLx/CH8g9sa6zBmBz5HxXa3IXhWJSSPYAPxewZkZL3QCesyPSxAv0rvONDMagXit/3bnyAI7CacsIOSTocL2ZRCQtxDt7APyn5UMzFIEHe1AJDqjABP+Ml3FHB6KbgyqS/vninBe1/FQG+OViWI5uLrzEYD2JjRp8dwFU5sjSmp+6/EGQtFt87inJXdnXS6ZSM/G28piFZhAt5Ork/rYIhtTgdV9nsZtsT+oof+qEc3YsikUjPnFWCvD0ydXdTPusqYS3m4+CSIEtY/+RFc5rR6d9JuaFAf5iIh2PxbjP6bU3sLOL0UNwiCOlUoX5NUn6ao5udlANSsr9EjBuQqTsA7zfDzl3QW4QiNHSJ1ThGZDRNnQWdcXly/2aBfrJwJ0ObYWhrYw9hVxpLhAeYmVO/RNgnObqPkvLUjHxU8o65gtTB2MtmjzQkuXqn2jwsPNkyMRuHCV4mlSqkCdtbjLLlmo6ROBLT8FaO/l6xBjlZw5j4f2IC3sNX+F1kZUNwnYghJ+LzTJsakZAsUo41YmGcXV9NEdn1PWI99SXOwneJvgcOzbTZR2SGPUQ6PwcnpNo0IKx7Uv5S8KFZ1OJ2EXQvy9EfL2bVIyJ4thRL0bNAV58jmySCdBHuyzx/iesFIbeLZOT8lL5aJGPvK4/hJawWWV0WTyZXHuqUJz4XF9T9D2nCSjNgl8Ya4SYRk+ajnyTlzPQ7WWSXw5rQXyWMQbeM7BicK8hZmtF91sL3PC0Iy7q2o0Wsz3OHJXTRRh4kTdjKpOyeVzGFWzFajMx+qXZpdBWjknAXeRiXXGOTPouQt166UhA2UcvS+jyUviO7u1Mp4SDI7CZiYKsjTdhy4TezfjWNO0Xc+kxkPKsK6v2JZwt0NSKuzRL7ZlviLrcmTkzKxRl5pYSD+L2qtHxmNwtpwjaJtHsQDhJbUGkMEyv9eRio3A2msU7x1lOdIGySWKC3JY4QAzNre088ntw/n9HVCC8xv6DPE5IyL55udWR3OqYKws7QkLArBFkbRYZVm9PXUuGitmVcKLaY6oUL+x0H4mwRu6eJ1LqEnXG4mD1F68yB4nd5tXVMbog8wlaItdUTKfn+SdlJcbyZadsnrF64sGOFC6wW21SzRJI0WcOtoyOxo2J3uCvOw+v4vnVMboiqnBPnu8VGZo3iQNuBwM14VGSW77XFC/OORUaLlfbwtjCgHaOLGNxTtRFZ5BO2XiyEP9ZxgFkJvfCMLT95aBbyzsOIbHFb2ajdVrFA849othgd/+loZ+ggrJ3hX/meHWoALuzlAAAAAElFTkSuQmCC\n",
+      "text/latex": [
+       "$\\displaystyle \\left(24 + 5 i\\right)^{0.5}$"
+      ],
+      "text/plain": [
+       "          0.5\n",
+       "(24 + 5⋅ⅈ)   "
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q1b = numpy.absolute(f)\n",
+    "q1b = numpy.square(q1a)\n",
+    "q1b = numpy.sum(q1a)\n",
+    "q1b = numpy.power(q1b, .5)\n",
+    "sympy.simplify(q1b)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "c) Compute the distance between f and g"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/latex": [
+       "$\\displaystyle 4.79583152331272$"
+      ],
+      "text/plain": [
+       "4.79583152331272"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q1c = f - g\n",
+    "q1c = numpy.absolute(q1c)\n",
+    "q1c = numpy.square(q1c)\n",
+    "q1c = numpy.sum(q1c)\n",
+    "q1c = numpy.power(q1c, .5)\n",
+    "sympy.simplify(q1c)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Question 2"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Consider the inner product space L2(0,1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "a) Compute |(1, t^3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAACIAAAAUCAYAAADoZO9yAAAABHNCSVQICAgIfAhkiAAAAbJJREFUSInN1TtoFUEUBuAvGsQiaGGhhUKwEG/lAxQEEbEIgoiu2IqNjY0gWImPLW3EVyMYMRKxVCzEQlBQ0dpSG1FsBC2USFRIrsXMwjJ3N9nc3SI/DLNz/jNn/zlnHiN5nlsOWJGMj+MWXuMX+njQIM56zOHmAj4nYrw+TqXkaDK+gG2YwVdsbSACjgiLelzDbxIWOIOxKoc0I2exBWtwuqEIyPADryq4EdyL/O26AGlGXi7h5wXW4gAeCuVJcSby+2NfiTQjw+AQVuFRBdfDFdxQna1OhWT4jeeJfRTT+ILziwVJS7NUrMZBPMOfhLuEHdiL2cUCtc3IhHAK0tOyW8jCVbxrEqitkAz/8LRkK0ryERebBmojZCUO4wV+luxjwhXQE8rVL7XL0edOHF8vJrXZI/uwzmBZ/uJuzZydwr55gw9KZWsj5Bjm8SSxz6q4wiPyKOQ+JstEKuRobLAh9nswFb+/41zJ9y2+NVW+EFIh23EysW2ODT5HIbuwEde6EMHgZs2Ft6GujUe/LPZ1j1wdiviTKTHsqcnwHp+GnD+AYTdrrysBBbp4azrBshHyH7wWSz/x+n1cAAAAAElFTkSuQmCC\n",
+      "text/latex": [
+       "$\\displaystyle \\frac{1}{4}$"
+      ],
+      "text/plain": [
+       "1/4"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "def L2_inner_product(f, g, tau):\n",
+    "    # you can define t here to not rely on a global definition\n",
+    "    t = sympy.symbols('t', real=True)\n",
+    "    return (sympy.integrate(f*sympy.conjugate(g), (t, 0, tau))/tau).simplify()\n",
+    "t = sympy.symbols('t', real=True)\n",
+    "q2a = L2_inner_product(1, t**3, 1)\n",
+    "q2a"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "b) Compute (-it, t^2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAACsAAAAVCAYAAADfLRcdAAAABHNCSVQICAgIfAhkiAAAAc5JREFUSInV1k2IT1EYBvDfMD7KlIWFDVv1l9JMWEmhpCT+dhYWylqykqK7lLIYNgpJM2uSZKEsJFbjIyUfiSyUhYWiGcJYnCvXuefe/tOcu5inTuf2Pp3nPOe97/kYKorCQsGiDjSPYxYHcwt3YXZT2U8luNX4hfMt4w8Ji53FkSrRhdkT6OFNgttXznmjYexaXMDXFNmF2Q94KWQmRh+fcT/BDeFqyV9MCec2u10weTbBrcQO3BJKIcbRkj+Mbynx3GbHyv5JgtuDpbie4Ho4g3HprKM7s48TXF/I2N0oPowJoXxOtokPz9ddhDFhc8Sbazl24w5mIu40RrEV023icWbf+3dsDNImK2NXYB2e4nekuwsj6qfAFiGb5/CozSj1zL5VX3kbPla+NwqLbyqBH7gdzT2B1zg1yGSx2Z0D26yjaXMtxl7cw5dKfET4EzQn6FLZxnEsZ802ba5tWKVeAt9xpUVrFA/wSlkiuc3O4EUUPyDU8M0oPi26TisoBLPXcPlvMNfRtQzr8Rw/I24/HuLTfCfJZXYDlqiXwGas0fwWmBNylcGUcLfH6Jf9XM0WZfsPXTxkqujjGd7lEMt9g8Xo5RTrOrNZsaDM/gEU3WEXIFY03wAAAABJRU5ErkJggg==\n",
+      "text/latex": [
+       "$\\displaystyle - \\frac{i}{4}$"
+      ],
+      "text/plain": [
+       "-ⅈ \n",
+       "───\n",
+       " 4 "
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q2b = L2_inner_product(-t*i, t**2, 1)\n",
+    "q2b"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "c) Compute ||1-it^2||"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAD4AAAAdCAYAAADy+d/cAAAABHNCSVQICAgIfAhkiAAAA+VJREFUWIXt2FuIVWUUB/CfYxfDdLrqIFGhOCU+RNHFqbAyOJnRZYQegoJ6KMKiCHzoQjgTCUVhYReihwIneuihmKLGtJQpuzxlmd2xMSbKMdJMzYrMHtbetdvufebsODOD2B823z5rfZd1+9Za+4zr6upyMKJlrAUYKxxScf4k/DwSglTAuGZsUtXjl2B+cvhYPU1BVcUvxNpmHT6WqKL4+OT5fYRkGVVUUfxcvDtSgow2qii+AK+NlCCjjSqKH4sfR0qQ0Uajis/EFyW8B/EmBrEH27AeS4SxynACnsF3+A2b8SiOblCmqdiL5RnaZuwrebZkFzdax6/AKyW8O/ABVmMrJmIOunBT8j6YWzND5Isp6MXnOBu3i3J5nuGj60rhuJdy9B3CgHnsyv5oVPF2fFnCm4xfC+hLcTfuwqIc70mh9G14LENfJgy5FDcPI1OnMM5bOfpPwuh10ZJ7vx+X5uYco771i5SGF5JxZo4+HTURlk/keEuwG9eJyClDK+aJKNxbZ14psh6voQPT0Jeh/9dsfnkybsjR5yXjKvyZ4+3EO4ksc0TuKMJlOAwvFvAOx7U4URhxg4iKfxkoq/hKkQBWCe+nQnXg+RIBsliMI4U3zsT5yaEP5OadkoxlV+croXi7csU7hVKrC3ht6MnRBnAD+lNC/o5/iF9Es7IOhwpL5T1ThMUi06ZYievxQ25eazLuKNknpR9Vwp8gEmCf/a/Zs3gbn4jomY5bRZLtE078iOJy9rLImERv3l8wpwht4iOiDQuTQ9fjjAbXp0g/RPaV8GsisvLZHLqxBkPCgRtFklyGI2SSXpHivf5RvIbXq8ltKBGqJur4ihw/9WirYkzOzcujU3wvvFpBpqeScW5KKFK8H8djlsisuwrmNIJv8Clm47gMPW2E2kvWpVWgKAeMF0lzjXLDFGFrMv5dKYoU/0Nk8XvxcYXNizAtGbMZNf2srRWcP0k0L3vwfsF+c0UUFYV5PXQk49cpoaxl7cU1yru1FKeKO51Hi2hCpogObXuGt0lUjpNxS25dt/DKCpG181goEm1vAW+26DnyOAmPJ+/PpcSyzq0P7+HbEn6K+XhI1MlNotGZigtEctuCGwvWLRIGWY6L8RnOwUUixO8pOe+qZN1QAe9q3CkiakBk9Rmi5k8QUfxwOrlM8Z3JguHwBp4W4XmaKEG7E+F7EsW2FazbJGr9fcJ4C/B9Mr+7ZM1Z4sPmkRJZ1ooe4XQR2hNF+7oukaVHplLU69W31+Gl2Gj/cG0Ug6KpaBSdyVh2v/s1XnoPqL+XO0XzMdCMzar+vTyWmNXMzQ4kjzcV/yt+sOEvANjMPS7jCGQAAAAASUVORK5CYII=\n",
+      "text/latex": [
+       "$\\displaystyle \\frac{\\sqrt{30}}{5}$"
+      ],
+      "text/plain": [
+       "√30\n",
+       "───\n",
+       " 5 "
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "def L2_norm(f, tau):\n",
+    "    return sympy.sqrt(L2_inner_product(f, f, tau))\n",
+    "\n",
+    "q2c = L2_norm(1-i*(t**2), 1)\n",
+    "q2c"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Question 3"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Consider the inner product space L2(0, 2pi). Let k and m be unequal integers."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "a) Compute ||cos(kt)||"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAADAAAAAdCAYAAADsMO9vAAAABHNCSVQICAgIfAhkiAAAAnhJREFUWIXt2E2ITWEYB/DffJBCyiQbGwtqytZiLDRDja98XLKwwIKdkrJQamqShZ1IsbCwsmNCY3wUDaKUIhKTIilDPhrfMTMs3jM5Xefe83HvNE351+mc3vu8//f5n+d5n+e9p6G7u9tkRuNEO1ArmnPaz8SnOq7fUCtB3giswMpo4XpcNSOvgHZcr8fC9UIeAU3R9XOcfCmEPAKW4PZ4OVIUeQSsxsXxcqQo8ghowfvxcqQosgpYgKcJ4y3YiR48w3cM4RZ25OCfixEczcuZtQ+sw4WE8c04jtdCdXoZObMRJ7Eqsvmdwr8+cqwnL2dWAQsxkDA+EInrxWhsfD/uYlO08JkU/pKQnjeE/pCZMx6ORhwUFMYxW+XcvyZEZrRsfBAnouf2FOdnYVnEM5KXMy6gE21CeOIoWn1+RffhFLs1mIqzRTjjKXRJUHlFEDb2BtpwOgN5HM3YFuOthhK+4moRzvIqcR/fhKYFU4SwloczDYewSIjc5Sp204SzVR9+FOFMKnPnhapAyLX+LB7HsBt78QRbU2w7MUOoPoU4kwSc81dAp+pvsBy7cASP0YEPKfYl4WzVW5QzSUA/5qAV0/Elg+OwB8fwKFpoMMW+CWuFqjNUlDNJwLCQZ114mMFx2IfDwh7qwNsMc5YKXbdS+mTirNTqz2GL5O5bji5hg93DcrzLMIfQjEajtQpzVurEfbiDVylObMcBoVLdFDZbOV7gVML4BuF4/qYWzkoCPgsNJg3zo3uTkK9J6PevgMWYJ6RITZzVTosfq/w2hm7p/3vbE+aVontS/ufinKjPKiU8wPNaifJ+VqkXWutFNOk/bP0XMNH4A9K1nizuH2p0AAAAAElFTkSuQmCC\n",
+      "text/latex": [
+       "$\\displaystyle \\frac{\\sqrt{2}}{2}$"
+      ],
+      "text/plain": [
+       "√2\n",
+       "──\n",
+       "2 "
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q3a = L2_norm(sympy.cos(t), 2*pi)\n",
+    "q3a"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "b) Compute (t^2, e^(2ikt))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAEwAAAAVCAYAAADsFggUAAAABHNCSVQICAgIfAhkiAAAAwtJREFUWIXt2FuIVVUcBvDfpFaQZBfCHkJIIqwG5jTUgy9qCWGI5XghIiqpXiSQbpRCwRAoEYGWD/VQOEFPEV6IvBA0XcQ3bbpJlJCZ0AULRhK7aPbwXwd3e/Ycz74wIfrBZu3zX//zrbW/vda31to9g4ODzqN7XPB/d2CC8QRO4d6qBHnBlmEjPsHRRP5WFzzTcRKv4Eo8gi04gOMYxW48XNDmROKWVO6tSjA59/tZ9OF3HMasLnnuFkJswXK8ih8xjENC0CV4HXemnFNVO10Dq/E8vq1KkH/bj+N6XIqVJXgG8Cs+xje4C9fgPqzBQ0L8H7BUiFcFK4TQ8yr+/xC+VuNl5QUbFuqXIZyG2/GumJYfpPt/cnk/4bV0P69sRxvAbeK5XszEFqZYN1eLsVOyChbiQmzuIvfvVJ5ooN2y6E/lp5nYqLCPlfgK72TqZuEe4b3v43OaEWwAxxJpJ0zGA+l+ZwPtlkVbsH2Z2G5cJQTbisFM3dNCsCG80Q7WXbEuxgLswB9nyH0BvdiOXTXbrYJ+sZjlDb+VypGC/DHxuoLdgalideyEVXhSGO79XXIfNNZHNqW64YK6oQ5cl4jFbMRYb20L9lku3i+s48tssO6UHMBfeK9DzqN4GfsxH791yb0Bl+ViLbGFeVMImkV+hGTRJwbHvoK6lhh5BzKxqbhO+Nqf2eQ6gk3CIrEqjo6T8xjWi7c0H7+U4N9QEFshBBvChyW4igwfLscM7PHfncHN6FHwEupMyTliVz/edHxGiDUilvQyYjWNIsOn83SkYcGWCD/YVlD3nDD5vWJkHanRThPoF4vS/lx8PMPvTeUXeaL8lFycLrg6lbOdNtQjeCqTuwc/5zgeFMePk+JMuqrgAQ7qbNJN4iLcKETJ7//GG2FXpPImIfLhdkVesJZ44Cxmpgu+F4LdKo4+6ws6eG0qJwkPK8JHJk6wXkxRbPh9YpbkR9LbmIu14jlealf0VPwetk6cEWfiuyoEZyuqetiAGMbnlFhU31bc0GgvziKca19ca+O8YCXxL45JsKshPFpIAAAAAElFTkSuQmCC\n",
+      "text/latex": [
+       "$\\displaystyle \\frac{1}{2} + i \\pi$"
+      ],
+      "text/plain": [
+       "1/2 + ⅈ⋅π"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q3b = L2_inner_product(t**2, exp(1)**(2*i*t), 2*pi)\n",
+    "q3b"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Question 4"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Is e^(2ikt) an orthonormal set of vectors in L2(0, 2pi)?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAA0AAAASCAYAAACAa1QyAAAABHNCSVQICAgIfAhkiAAAAIdJREFUKJHt0SEOwmAMBeBvBD2NJAiCG5ZbIPDTSJJJxH8HLoDgHghOQoJEEfxmftVkyzBTNHlpX9OX17RFSsmvMQv8gAse+KDFLYrmgZ9R4YsXNmOcTlijxLFvveh07xscchoVf9HkovjcfQYsct7hmus3mijaog69VQY80cT1EooBLJnyEB2yexAji7I9mAAAAABJRU5ErkJggg==\n",
+      "text/latex": [
+       "$\\displaystyle 1$"
+      ],
+      "text/plain": [
+       "1"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "q4 = L2_inner_product(exp(1)**(2*i*t), exp(1)**(2*i*t), 2*pi)\n",
+    "q4"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Question 5"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Using Python, find a constant a such that 1 is orthogonal to 1+a^2 in the L2(0,1) space."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a/3 + 1\n",
+      "[-3]\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sympy\n",
+    "\n",
+    "a = sympy.symbols('a', integer = True, real = True)\n",
+    "t = sympy.symbols('t', real=True)\n",
+    "\n",
+    "# integrate in Lebesgue space where f = 1 and g = 1+at\n",
+    "def L2_inner_product(f, g, tau):\n",
+    "    # you can define t here to not rely on a global definition\n",
+    "    t = sympy.symbols('t', real=True)\n",
+    "    return (sympy.integrate(f*sympy.conjugate(g), (t, 0, tau))/tau).simplify()\n",
+    "\n",
+    "q5 = L2_inner_product(1, 1+a*(t**2), 1)\n",
+    "print(q5)\n",
+    "print(sympy.solve(q5))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Question 6"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Using Python, show that cos(t) is orthogonal to sin(t) in the L2(0, 2pi) space, and cos(t) is not orthogonal to sin(t) in the L2(0,1) space."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Inner product of cos(t) and sin(t) in L2(0, 2pi):  0\n",
+      "Inner product oc cos(t) and sin(t) in L2(0,1):  sin(1)**2/2\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sympy\n",
+    "\n",
+    "def L2_inner_product(f, g, tau):\n",
+    "    # you can define t here to not rely on a global definition\n",
+    "    t = sympy.symbols('t', real=True)\n",
+    "    return (sympy.integrate(f*sympy.conjugate(g), (t, 0, tau))/tau).simplify()\n",
+    "\n",
+    "t = sympy.symbols('t', real=True)\n",
+    "q6 = L2_inner_product(sympy.cos(t), sympy.sin(t), 2*pi)\n",
+    "print(\"Inner product of cos(t) and sin(t) in L2(0, 2pi): \", q6)\n",
+    "\n",
+    "q6 = L2_inner_product(sympy.cos(t), sympy.sin(t), 1)\n",
+    "print(\"Inner product oc cos(t) and sin(t) in L2(0,1): \", q6)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
