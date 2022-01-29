@@ -1,4 +1,3 @@
 ipython
-pylab
 numpy==1.18.5
 sympy==1.6.1
