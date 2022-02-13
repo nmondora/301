@@ -1,4 +1,5 @@
 %% AAE 301 HW 4
+% Nick Mondora
 %% QUESTION 1
 
 % creating function
