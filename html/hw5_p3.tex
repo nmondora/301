@@ -1,0 +1,86 @@
+
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and republish this document.
+
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{color}
+
+\sloppy
+\definecolor{lightgray}{gray}{0.5}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+    
+    
+\subsection*{Contents}
+
+\begin{itemize}
+\setlength{\itemsep}{-1ex}
+   \item Part A
+   \item Part B
+   \item Part C
+   \item Solutions
+\end{itemize}
+\begin{verbatim}
+v = 4096;
+tau = 1;
+t = linspace(0,tau, v);
+
+f = exp(t);
+g = t;
+
+fFour = ifft(f);
+gFour = ifft(g);
+\end{verbatim}
+
+
+\subsection*{Part A}
+
+\begin{par}
+equal to tau * a0
+\end{par} \vspace{1em}
+\begin{verbatim}
+partA = tau * fFour(1);
+\end{verbatim}
+
+
+\subsection*{Part B}
+
+\begin{par}
+equal to summation of abs value of every ak
+\end{par} \vspace{1em}
+\begin{verbatim}
+partB = sum(abs(fFour) .^ 2);
+\end{verbatim}
+
+
+\subsection*{Part C}
+
+\begin{par}
+equal to summation of ak * bk\_conjugte
+\end{par} \vspace{1em}
+\begin{verbatim}
+gFourConj = conj(gFour);
+partC = sum(fFour .* gFourConj);
+\end{verbatim}
+
+
+\subsection*{Solutions}
+
+\begin{verbatim}
+fprintf("a) %f\n", partA);
+fprintf("b) %f\n", partB);
+fprintf("c) %f\n", partC);
+\end{verbatim}
+
+        \color{lightgray} \begin{verbatim}a) 1.718316
+b) 3.194772
+c) 1.000088
+\end{verbatim} \color{black}
+    
+
+
+\end{document}
+

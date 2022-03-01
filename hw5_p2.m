@@ -18,16 +18,15 @@ freq = fftfreq(nu, dt);
 % find magnitude of ak's, expressed in log-scale, Decibels
 dB = 20*log10(abs(ak));
 
-
 %% You only have to change this section
 
 % ideal band stop filter, change the center and bandwidth to reduce
 % the volume of the singing from the Purdue fight song
-center = 0;  % TODO center frequency in Hz for band-stop, set this
-bandwidth = 0; % TODO bandwidth in Hz for the band-stop, set this
+center = 2200;  % TODO center frequency in Hz for band-stop, set this
+bandwidth = 1350; % TODO bandwidth in Hz for the band-stop, set this
 
 % find all indicies within the band-stop range
-k_kill = [1]; % TODO, find all k's you want to remove
+k_kill = abs(abs(freq) - center) < bandwidth; % TODO, find all k's you want to remove
   % note, to use a bandstop filter you can use logic like this
   %  k_kill = abs(abs(freq) - center) < bandwidth
   % notice that this finds k and -k, so handles the conjugates for you
